@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stock Portfolio Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📈 Stock Portfolio Tracker</h1>
+
+    <div class="hero-card">
+        <p>Track your investments, view live portfolio value, and monitor profit/loss in one sleek dashboard.</p>
+    </div>
+
+    <div class="card">
+
+        <form action="/add" method="POST">
+
+            <input type="text"
+                   name="stock"
+                   placeholder="Stock Name"
+                   required>
+
+            <input type="number"
+                   name="quantity"
+                   placeholder="Quantity"
+                   required>
+
+            <input type="number"
+                   step="0.01"
+                   name="price"
+                   placeholder="Price"
+                   required>
+
+            <button>Add Stock</button>
+
+        </form>
+
+    </div>
+
+    <div class="summary-grid">
+        <div class="summary-card">
+            <span>Total Portfolio Value</span>
+            <strong>₹{{ total_value }}</strong>
+        </div>
+        <div class="summary-card">
+            <span>Total Invested</span>
+            <strong>₹{{ total_invested }}</strong>
+        </div>
+        <div class="summary-card">
+            <span>Total Sold</span>
+            <strong>₹{{ total_sold }}</strong>
+        </div>
+        <div class="summary-card">
+            <span>Net Investment</span>
+            <strong>₹{{ net_investment }}</strong>
+        </div>
+    </div>
+
+    <div class="profit-loss-card {% if profit_loss >= 0 %}positive{% else %}negative{% endif %}">
+        <div class="profit-loss-title">Profit / Loss</div>
+        <div class="profit-loss-value">₹{{ profit_loss }}</div>
+    </div>
+
+    <table>
+
+        <tr>
+            <th>Stock</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Value</th>
+            <th>Action</th>
+        </tr>
+
+        {% for stock in stocks %}
+
+        <tr>
+            <td>{{ stock[1] }}</td>
+            <td>{{ stock[2] }}</td>
+            <td>₹{{ stock[3] }}</td>
+            <td>₹{{ stock[2] * stock[3] }}</td>
+
+            <td>
+                <a href="/delete/{{ stock[0] }}">
+                    Delete
+                </a>
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    <div class="history-card">
+        <h2>Transaction History</h2>
+        <table>
+            <tr>
+                <th>Time</th>
+                <th>Action</th>
+                <th>Stock</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Amount</th>
+            </tr>
+            {% for event in history %}
+            <tr>
+                <td>{{ event[1] }}</td>
+                <td>{{ event[2] }}</td>
+                <td>{{ event[3] }}</td>
+                <td>{{ event[4] }}</td>
+                <td>₹{{ event[5] }}</td>
+                <td>₹{{ event[6] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
